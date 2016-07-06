@@ -32,19 +32,38 @@
         right: 0;
         bottom: 0;
       }
-      .name {
-        position: absolute;
+      .container {
+        max-width: 24em;
+        height: 100vh;
+        margin: 0 auto;
+        padding: 0px 1em;
+      }
+      .center {
+        position: relative;;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        margin: 0;
-        font-size: calc(150% + 2vw);
         text-align: center;
+      }
+      .name {
+        margin-top: 0;
+        margin-bottom: 1em;
+        font-size: calc(150% + 2vw);
+      }
+      .tagline {
+        margin: 0;
+        font-size: calc(100% + .5vw);
+        line-height: 1.5;
       }
     </style>
   </head>
   <body>
-    <h1 class="name">Bogdan Soare</h1>
+    <div class="container">
+      <div class="center">
+        <h1 class="name">Bogdan Soare</h1>
+        <h2 class="tagline">I develop experiences on the mobile and web</h2>
+      </div>
+    </div>
     <div id="background" class="background"></div>
 
     <script src="js/three.min.js"></script>
