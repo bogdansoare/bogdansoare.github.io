@@ -64,120 +64,115 @@
         <h2 class="tagline">I develop experiences on the mobile and web</h2>
       </div>
     </div>
-    <div id="background" class="background"></div>
+    <div class="background js-root"></div>
 
     <script src="js/three.min.js"></script>
     <script>
-      var camera, scene, renderer;
-      var geometry, material, mesh;
       (function() {
+        var camera, scene, renderer;
+        var geometry, material, mesh;
 
-      init();
-      animate();
+        init();
+        animate();
 
-      var displacement = 50;
+        window.addEventListener( 'resize', onWindowResize, false );
 
-      function init() {
+        function init() {
+          var width = window.innerWidth;
+          var height = window.innerHeight;
+          camera = new THREE.OrthographicCamera(width / -2, width / 2, height / 2, height / -2, 1, 100009);
 
-        var width = window.innerWidth;
-        var height = window.innerHeight;
-        camera = new THREE.OrthographicCamera(width / -2, width / 2, height / 2, height / -2, 1, 100009);
+          camera.position.z = 1000;
+          camera.lookAt(new THREE.Vector3(0, 0, 0));
+          scene = new THREE.Scene();
 
-        camera.position.z = 1000;
-        camera.lookAt(new THREE.Vector3(0, 0, 0));
-        scene = new THREE.Scene();
+          geometry = new THREE.PlaneGeometry(2000, 2000, 20, 20);
 
-        geometry = new THREE.PlaneGeometry(2000, 2000, 20, 20);
+          for (var i = 0; i < geometry.vertices.length; i++) {
 
-        for (var i = 0; i < geometry.vertices.length; i++) {
+            geometry.vertices[i].z = -(25) + Math.random() * 50;
 
-          geometry.vertices[i].z = -(25) + Math.random() * 50;
+          }
+          geometry.computeFaceNormals();
 
-        }
-        geometry.computeFaceNormals();
+          generateMorphTargets(geometry);
 
-        generateMorphTargets(geometry);
+          var ambientLight = new THREE.AmbientLight(0x333333);
+          scene.add(ambientLight);
 
-        var ambientLight = new THREE.AmbientLight(0x333333);
-        scene.add(ambientLight);
+          var directionalLight = new THREE.DirectionalLight(0xffffff);
+          directionalLight.position.set(-10, -10, 5).normalize();
+          scene.add(directionalLight);
 
-        var directionalLight = new THREE.DirectionalLight(0xffffff);
-        directionalLight.position.set(-10, -10, 5).normalize();
-        scene.add(directionalLight);
+          material = new THREE.MeshBasicMaterial({
+            color: 0xff0000,
+            morphTargets: true
+          });
+          material = new THREE.MeshPhongMaterial({
+            color: '#1295AB',
+            morphTargets: true,
+            morphNormals: true,
+            specular: '#7BAEBD',
+            shading: THREE.FlatShading,
+            emissive: '#006063',
+            shininess: 100
+          });
+          mesh = new THREE.Mesh(geometry, material);
 
-        material = new THREE.MeshBasicMaterial({
-          color: 0xff0000,
-          // wireframe: true,
-          morphTargets: true
-        });
-        material = new THREE.MeshPhongMaterial({
-          color: '#1295AB',
-          morphTargets: true,
-          morphNormals: true,
-          // light
-          specular: '#7BAEBD',
-          shading: THREE.FlatShading,
-          // intermediate
-          // color: '#00abb1',
-          // dark
-          emissive: '#006063',
-          shininess: 100
-        });
-        mesh = new THREE.Mesh(geometry, material);
+          mesh.rotation.x = 60 * (Math.PI / 180);
+          mesh.rotation.z = 45 * (Math.PI / 180);
+          mesh.position.z = 100;
 
-        mesh.rotation.x = 60 * (Math.PI / 180);
-        mesh.rotation.z = 45 * (Math.PI / 180);
-        mesh.position.z = 100;
+          scene.add(mesh);
 
-        scene.add(mesh);
+          renderer = new THREE.WebGLRenderer({
+            antialiasing: true
+          });
+          renderer.setSize(window.innerWidth, window.innerHeight);
 
-        renderer = new THREE.WebGLRenderer({
-          antialiasing: true
-        });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-
-        document.getElementById('background').appendChild(renderer.domElement);
-
-      }
-
-      function generateMorphTargets(geometry) {
-
-        var vertices = [];
-
-        for (var i = 0; i < geometry.vertices.length; i++) {
-
-          vertices.push(geometry.vertices[i].clone());
-
-          vertices[vertices.length - 1].z = -25 + Math.random() * 50;
-
+          document.querySelector('.js-root').appendChild(renderer.domElement);
         }
 
-        geometry.morphTargets.push({
-          name: 'target1',
-          vertices: vertices
-        });
+        function generateMorphTargets(geometry) {
+          var vertices = [];
 
-        // geometry.morphTargetsNeedUpdate = true;
-        // geometry.updateMorphTargets();
+          for (var i = 0; i < geometry.vertices.length; i++) {
 
-      }
+            vertices.push(geometry.vertices[i].clone());
 
-      function animate() {
+            vertices[vertices.length - 1].z = -25 + Math.random() * 50;
+          }
 
-        var time = Date.now() * 0.001;
+          geometry.morphTargets.push({
+            name: 'target1',
+            vertices: vertices
+          });
+        }
 
-        mesh.morphTargetInfluences[0] = (1 + Math.sin(4 * time)) / 2;
-        // mesh.morphTargetInfluences[ 0 ] = 1;
-        // note: three.js includes requestAnimationFrame shim
-        requestAnimationFrame(animate);
-        geometry.computeMorphNormals();
+        function animate() {
+          var time = Date.now() * 0.001;
 
-        mesh.rotation.z += 0.0002;
+          mesh.morphTargetInfluences[0] = (1 + Math.sin(4 * time)) / 2;
+          requestAnimationFrame(animate);
+          geometry.computeMorphNormals();
 
-        renderer.render(scene, camera);
+          mesh.rotation.z += 0.0002;
 
-      }
+          renderer.render(scene, camera);
+        }
 
+        function onWindowResize() {
+          var width = window.innerWidth;
+          var height = window.innerHeight;
+
+          camera.left = width / -2;
+          camera.right = width / 2;
+          camera.top = height / 2;
+          camera.bottom = height / -2;
+          camera.updateProjectionMatrix();
+
+          renderer.setSize(width, height);
+        }
       })();
     </script>
   </body>
