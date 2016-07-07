@@ -87,12 +87,9 @@
           scene = new THREE.Scene();
 
           geometry = new THREE.PlaneGeometry(2000, 2000, 20, 20);
-
-          for (var i = 0; i < geometry.vertices.length; i++) {
-
-            geometry.vertices[i].z = -(25) + Math.random() * 50;
-
-          }
+          geometry.vertices.forEach(function(vertice) {
+            vertice.z = -(25) + Math.random() * 50;
+          });
           geometry.computeFaceNormals();
 
           generateMorphTargets(geometry);
@@ -136,12 +133,10 @@
         function generateMorphTargets(geometry) {
           var vertices = [];
 
-          for (var i = 0; i < geometry.vertices.length; i++) {
-
-            vertices.push(geometry.vertices[i].clone());
-
+          geometry.vertices.forEach(function(vertice) {
+            vertices.push(vertice.clone());
             vertices[vertices.length - 1].z = -25 + Math.random() * 50;
-          }
+          });
 
           geometry.morphTargets.push({
             name: 'target1',
