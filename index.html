@@ -42,7 +42,8 @@
         position: relative;;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
         text-align: center;
       }
       .name {
@@ -51,10 +52,60 @@
         font-size: calc(150% + 2vw);
       }
       .tagline {
-        margin: 0;
+        margin-top: 0;
+        margin-bottom: 2em;
         font-size: calc(100% + .5vw);
         line-height: 1.5;
       }
+      .icons {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+      }
+      .icon {
+        display: block;
+        width: calc(3.36em + 1vw);
+        height: calc(4em + 1vw);
+        margin-left: 1em;
+        margin-right: 1em;
+        -webkit-transition: all 0.2s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+        transition: all 0.2s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+      }
+      .icon:hover {
+        -webkit-transform: scale3d(1.2, 1.2, 1);
+                transform: scale3d(1.2, 1.2, 1);
+        -webkit-transition: all 0.35s cubic-bezier(0.000, 1.270, 0.460, 1.650);
+        transition: all 0.35s cubic-bezier(0.000, 1.270, 0.460, 1.650)
+      }
+      .icon svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .icon--sun path:first-of-type { fill: #fff; }
+      .icon--sun circle {
+        stroke: #219cb5;
+        stroke-width: 2px;
+        fill: none;
+      }
+      .icon--sun circle:last-of-type {
+        stroke-width: 2px;
+        stroke-dasharray: 2,7.4;
+      }
+      .icon--wave path:first-of-type { fill: #219cb5; }
+      .icon--wave circle {
+        stroke: #fff;
+        stroke-width: 2px;
+        fill: none;
+      }
+      .icon--wave mask circle {
+        fill: #fff;
+        stroke: none;
+      }
+      .icon--wave path:last-of-type { fill: #fff; }
     </style>
   </head>
   <body>
@@ -62,6 +113,33 @@
       <div class="center">
         <h1 class="name">Bogdan Soare</h1>
         <h2 class="tagline">I develop experiences on the mobile and web</h2>
+
+        <div class="icons">
+          <a href="https://github.com/bogdansoare" class="icon icon--sun" title="Github">
+            <svg viewBox="0 0 42 50">
+              <path d="M19,1 Q21,0,23,1 L39,10 Q41.5,11,42,14 L42,36 Q41.5,39,39,40 L23,49 Q21,50,19,49 L3,40 Q0.5,39,0,36 L0,14 Q0.5,11,3,10 L19,1" />
+              <circle cx="21" cy="25" r="8" />
+              <circle cx="21" cy="25" r="12">
+                <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 21 25" to="360 21 25" dur="3.5s" repeatCount="indefinite" />
+              </circle>
+            </svg>
+          </a>
+
+          <a href="https://bogdan.exposure.co/design-portfolio" class="icon icon--wave" title="Portfolio">
+        		<svg viewBox="0 0 42 50">
+        			<path d="M19,1 Q21,0,23,1 L39,10 Q41.5,11,42,14 L42,36 Q41.5,39,39,40 L23,49 Q21,50,19,49 L3,40 Q0.5,39,0,36 L0,14 Q0.5,11,3,10 L19,1" />
+        			<circle cx="21" cy="25" r="14" />
+        			<mask id="mask-hex-icon-wave">
+        				<circle cx="21" cy="25" r="14">
+        					<animateTransform attributeName="transform" attributeType="XML" type="translate" from="0 0" to="24 0" dur="1.5s" repeatCount="indefinite" />
+        				</circle>
+        			</mask>
+        			<path d="M0,24 Q6,29,12,24 Q18,19,24,24 Q30,29,36,24 Q42,19,48,24 Q54,29,60,24 L60,40 L0,40" mask="url(#mask-hex-icon-wave)">
+        				<animateTransform attributeName="transform" attributeType="XML" type="translate" from="0 0" to="-24 0" dur="1.5s" repeatCount="indefinite" />
+        			</path>
+        		</svg>
+        	</a>
+        </div>
       </div>
     </div>
     <div class="background js-root"></div>
